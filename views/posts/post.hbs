@@ -1,11 +1,8 @@
-<h1>{{post.message}}</h1>
-
-{{! comments go here }}
-<ul>
-  {{#each comments}}
-    <li>{{this.message}} - {{this.date}}</li>
-  {{/each}}
-</ul>
+<link rel="stylesheet" href="/stylesheets/post.css">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
 
 <form action="/posts/{{post._id}}" method="post">
   <input
@@ -16,3 +13,67 @@
   />
   <input type="submit" value="Submit" />
 </form>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h2 class="page-header">Comments</h2>
+        <section class="comment-list">
+          {{#each comments }}
+            <article class="row">
+            {{!-- div with user image --}}
+            <div class="col-md-2 col-sm-2 hidden-xs">
+              <figure class="thumbnail">
+                {{!-- put image.data.toString('base64') of user in thise img tag --}}
+                <img class="img-responsive" src="http://www.tangoflooring.ca/wp-content/uploads/2015/07/user-avatar-placeholder.png" />
+                {{!-- put firstName of user in thise img tag --}}
+                <figcaption class="text-center">{{this.firstName}}</figcaption>
+              </figure>
+            </div>
+            {{!-- div with comment stuff --}}
+            <div class="col-md-10 col-sm-10">
+              <div class="panel panel-default arrow left">
+                <div class="panel-body">
+                  <header class="text-left">
+                    <div class="comment-user"><i class="fa fa-user"></i>{{this.firstName}}</div>
+                    <time class="comment-date" datetime="16-12-2014 01:05"><i class="fa fa-clock-o"></i>{{this.date}}</time>
+                  </header>
+                  <div class="comment-post">
+                    <p>{{this.message}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+          {{/each}}
+          {{!--
+          <!-- Second Comment -->
+          <article class="row">
+            <div class="col-md-10 col-sm-10">
+              <div class="panel panel-default arrow right">
+                <div class="panel-body">
+                  <header class="text-right">
+                    <div class="comment-user"><i class="fa fa-user"></i> That Guy</div>
+                    <time class="comment-date" datetime="16-12-2014 01:05"><i class="fa fa-clock-o"></i> Dec 16, 2014</time>
+                  </header>
+                  <div class="comment-post">
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+                  </div>
+                  <p class="text-right"><a href="#" class="btn btn-default btn-sm"><i class="fa fa-reply"></i> reply</a></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2 col-sm-2 hidden-xs">
+              <figure class="thumbnail">
+                <img class="img-responsive" src="http://www.tangoflooring.ca/wp-content/uploads/2015/07/user-avatar-placeholder.png" />
+                <figcaption class="text-center">username</figcaption>
+              </figure>
+            </div>
+          </article>
+          --}}
+        </section>
+    </div>
+  </div>
+</div>
