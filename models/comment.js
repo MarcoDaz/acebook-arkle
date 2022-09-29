@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 
 const CommentSchema = new mongoose.Schema({
   message: String,
-  postId: String,
-  date: { type: Date, default: Date.now },
+  postId: String
 });
 
 const Comment = mongoose.model("Comment", CommentSchema);
