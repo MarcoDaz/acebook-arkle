@@ -5,28 +5,30 @@ const User = require("../models/user");
 const PostsController = {
   Index: (req, res) => {
     // find all posts
-    Post.find({}).sort('-timeAdded').exec((err, posts) => {
-      if (err) {
-        throw err;
-      }
+    Post.find({})
+      .sort("-timeAdded")
+      .exec((err, posts) => {
+        if (err) {
+          throw err;
+        }
 
-      // // posts = [ post1, post2 ]
-      // // find all matching users
-      posts.forEach((post, index) => {
-        console.log(post)
-        User.findById(post.userId).then((user) => {
-          // 1. convert image into base 64 and save in post
-          posts[index].image = user.image.data.toString("base64");
-          console.log(user)
-          // 2. save name in post
-          posts[index].name = user.firstName;
+        // // posts = [ post1, post2 ]
+        // // find all matching users
+        posts.forEach((post, index) => {
+          console.log(post);
+          User.findById(post.userId).then((user) => {
+            // 1. convert image into base 64 and save in post
+            posts[index].image = user.image.data.toString("base64");
+            console.log(user);
+            // 2. save name in post
+            posts[index].name = user.firstName;
+          });
         });
+
+        console.log(posts);
+
+        res.render("posts/index", { posts: posts });
       });
-
-      console.log(posts);
-
-      res.render("posts/index", { posts: posts });
-    });
   },
   New: (req, res) => {
     res.render("posts/new", {});
