@@ -49,11 +49,15 @@ const PostsController = {
     const post = await Post.findById(postId).exec();
     console.log(post);
 
+    /// find the postUser
+    const postUser = await User.findById(post.userId).exec();
+    const postUserImage = postUser.image.data.toString('base64');
+
     // find the relevant comments
     const comments = await Comment.find(
       { postId: postId }
     ).exec();
-    commnets = comments.reverse();
+    comments.reverse();
     console.log(comments);
 
     // find the matching comment users
@@ -69,6 +73,8 @@ const PostsController = {
 
     res.render("posts/post", {
       post: post,
+      postUser: postUser,
+      postUserImage: postUserImage,
       comments: comments,
     });
   },
