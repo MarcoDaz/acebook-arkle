@@ -15,7 +15,6 @@ const PostsController = {
       posts.forEach((post, index) => {
         User.findById(post.userId).then((user) => {
           // 1. convert image into base 64 and save in post
-          console.log(user);
           posts[index].image = user.image.data.toString("base64");
 
           // 2. save name in post
@@ -44,20 +43,33 @@ const PostsController = {
       res.status(201).redirect("/posts");
     });
   },
-  View: (req, res) => {
+  View: async (req, res) => {
     const postId = req.params.id;
+    // find the relevant post
+    const post = await Post.findById(postId).exec();
+    console.log(post);
 
-    Post.findOne({ _id: postId }).then((post) => {
-      if (!post) {
-        res.redirect("/posts");
-      } else {
-        Comment.find({ postId: postId }).then((comments) => {
-          res.render("posts/post", {
-            post: post,
-            comments: comments,
-          });
-        });
-      }
+    // find the relevant comments
+    const comments = await Comment.find(
+      { postId: postId }
+    ).exec();
+    commnets = comments.reverse();
+    console.log(comments);
+
+    // find the matching comment users
+    const users = await Promise.all(comments.map(async (comment) => {
+      const foundUser = await User.findById(comment.userId).exec();
+      return foundUser;
+    }));
+    users.map((user, i) => {
+      comments[i].user = {
+      firstName: user.firstName, image: user.image.data.toString('base64')
+      };
+    });
+
+    res.render("posts/post", {
+      post: post,
+      comments: comments,
     });
   },
   CreateComment: (req, res) => {
@@ -70,6 +82,7 @@ const PostsController = {
     const comment = new Comment({
       message: req.body.newComment,
       postId: req.params.id,
+      userId: req.session.user._id
     });
 
     comment.save((err) => {
